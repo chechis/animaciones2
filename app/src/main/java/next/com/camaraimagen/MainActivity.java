@@ -9,9 +9,18 @@ import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,10 +28,8 @@ import android.widget.Toast;
 
 import java.io.File;
 
-public class MainActivity extends AppCompatActivity {
-
-    private Button botonCamara, botonVideo;
-    private ImageView imgCamara;
+public class MainActivity extends AppCompatActivity
+    implements NavigationView.OnNavigationItemSelectedListener{
 
     private static final int REQUEST_CODE = 1;
 
@@ -32,72 +39,93 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         int leer = ActivityCompat.checkSelfPermission(this,Manifest.permission.WRITE_EXTERNAL_STORAGE);
-
         if(leer == PackageManager.PERMISSION_DENIED){
             ActivityCompat.requestPermissions(this, PERMISOS, REQUEST_CODE);
         }
-
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        botonCamara = (Button)findViewById(R.id.btn_camara);
-        imgCamara = (ImageView)findViewById(R.id.img_camara);
-        botonVideo = (Button) findViewById(R.id.btn_inicio_video);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
-        botonVideo.setOnClickListener(new View.OnClickListener() {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent video = new Intent(MainActivity.this, Video.class);
-                startActivity(video);
+                Snackbar.make(v, "Replace with your own action", Snackbar.LENGTH_LONG)
+                        .setAction("Action", null).show();
             }
         });
 
-        botonCamara.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
 
-                File imagenFolder = new File(Environment.getExternalStorageDirectory(),"CamaraFolder");
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
-                imagenFolder.mkdirs();
 
-                File imagen = new File(imagenFolder , "foto.jpg");
-
-                Uri uriImagen = Uri.fromFile(imagen);
-
-                cameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, uriImagen);
-
-                startActivityForResult(cameraIntent,REQUEST_CODE);
-            }
-        });
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == REQUEST_CODE && resultCode == RESULT_OK){
-            Toast.makeText(MainActivity.this, "Se ha guardado la imagen:\n" + Environment.getExternalStorageDirectory() + "/CamaraFolder/foto.jpg", Toast.LENGTH_LONG).show();
-
-            Bitmap bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory() + "/CamaraFolder/foto.jpg");
-
-            int height = bitmap.getHeight();
-            int width = bitmap.getWidth();
-
-            float scaleA = ((float)(width/2))/width;
-            float scaleB = ((float)(height/2))/height;
-
-            Matrix matrix = new Matrix();
-            matrix.postScale(scaleA,scaleB);
-
-            Bitmap nuevaImagen = Bitmap.createBitmap(bitmap,0,0,width,height,matrix,true);
-
-            imgCamara.setImageBitmap(nuevaImagen);
-
-        }else{
-            Toast.makeText(MainActivity.this, "No se guardó correctamente la imagen en el dispositivo", Toast.LENGTH_LONG).show();
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.action_settings) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    @Override
+    public boolean onNavigationItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+
+        if (id == R.id.nav_animaciones) {
+            //Intent intent = new Intent(MainActivity.this, Graficos.class);
+            //startActivity(intent);
+        } else if (id == R.id.nav_graficos) {
+
+            Intent intent = new Intent(MainActivity.this, Graficos.class);
+            startActivity(intent);
+
+        } else if (id == R.id.nav_imagen) {
+            Intent intent = new Intent(MainActivity.this, Imagen.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_audio) {
+            Intent intent = new Intent(MainActivity.this, Audios.class);
+            startActivity(intent);
+        } else if (id == R.id.nav_video) {
+            Intent intent = new Intent(MainActivity.this, Video.class);
+            startActivity(intent);
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+
     }
 }
