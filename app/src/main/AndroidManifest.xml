@@ -18,7 +18,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".Main2Activity"></activity>
+        <activity android:name=".Video" />
+        <activity android:name=".Audio" />
+        <activity android:name=".Audios" />
+        <activity android:name=".Graficos" />
+        <activity android:name=".Imagen"></activity>
     </application>
 
 </manifest>

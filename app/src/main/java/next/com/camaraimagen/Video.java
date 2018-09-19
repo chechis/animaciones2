@@ -17,7 +17,7 @@ import android.widget.VideoView;
 
 import java.io.File;
 
-public class Main2Activity extends AppCompatActivity{
+public class Video extends AppCompatActivity{
 
     FloatingActionButton fab;
 
@@ -76,7 +76,7 @@ public class Main2Activity extends AppCompatActivity{
         super.onActivityResult(requestCode, resultCode, data);
 
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK){
-            Toast.makeText(Main2Activity.this, "Se guardó el video en:\n"+
+            Toast.makeText(Video.this, "Se guardó el video en:\n"+
                     Environment.getExternalStorageDirectory() + FOLDER + NOMBRE + FORMATO_VIDEO, Toast.LENGTH_LONG).show();
 
             videoView.setVideoURI(videoUri);
@@ -90,7 +90,7 @@ public class Main2Activity extends AppCompatActivity{
             });
 
         }else{
-            Toast.makeText(Main2Activity.this, "Ha ocurrido un error al guardar el video", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Video.this, "Ha ocurrido un error al guardar el video", Toast.LENGTH_SHORT).show();
         }
     }
 }

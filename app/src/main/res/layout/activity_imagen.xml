@@ -5,23 +5,30 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Video">
+    tools:context=".Imagen">
 
-    <VideoView
-        android:id="@+id/video_view"
-        android:layout_width="match_parent"
-        android:layout_height="350dp"
-        android:layout_margin="20dp"
-        android:elevation="10dp" />
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:elevation="10dp">
+        <ImageView
+            android:layout_margin="20dp"
+            android:elevation="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            android:src="@drawable/camara"
+            android:id="@+id/img_camara"/>
+
+    </RelativeLayout>
 
 
     <TextView
-        android:id="@+id/txt_video_ruta"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
+        android:id="@+id/txt_imagen_ruta"
         android:text="Ruta: ningún archivo seleccionado."
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:layout_gravity="center"/>
 
 
     <LinearLayout
@@ -36,7 +43,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:id="@+id/btn_video_abrir"
+            android:id="@+id/btn_imagen_abrir"
             android:background="#4DB6AC"
             android:layout_marginRight="10dp"
             android:text="ABRIR"
@@ -47,11 +54,12 @@
             android:layout_width="0dp"
             android:layout_weight="2"
             android:layout_height="wrap_content"
-            android:id="@+id/fab"
+            android:id="@+id/btn_camara"
             android:background="#4DB6AC"
             android:text="INICIAR GRABACIÓN"
             android:textColor="#ffffff"
             android:theme="@style/Widget.AppCompat.Button.Borderless"
             />
     </LinearLayout>
+
 </LinearLayout>

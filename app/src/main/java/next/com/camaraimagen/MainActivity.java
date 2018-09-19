@@ -21,7 +21,7 @@ import java.io.File;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button botonCamara;
+    private Button botonCamara, botonVideo;
     private ImageView imgCamara;
 
     private static final int REQUEST_CODE = 1;
@@ -44,6 +44,15 @@ public class MainActivity extends AppCompatActivity {
 
         botonCamara = (Button)findViewById(R.id.btn_camara);
         imgCamara = (ImageView)findViewById(R.id.img_camara);
+        botonVideo = (Button) findViewById(R.id.btn_inicio_video);
+
+        botonVideo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent video = new Intent(MainActivity.this, Video.class);
+                startActivity(video);
+            }
+        });
 
         botonCamara.setOnClickListener(new View.OnClickListener() {
             @Override
