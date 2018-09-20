@@ -12,6 +12,8 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
 
@@ -19,10 +21,11 @@ import java.io.File;
 
 public class Video extends AppCompatActivity{
 
-    FloatingActionButton fab;
+    Button fab;
 
     private static final String FORMATO_VIDEO = ".mp4";
     private static final String FOLDER = "/GIFs/";
+    private TextView txtRuta;
 
     private static final String NOMBRE = "gif";
 
@@ -48,8 +51,8 @@ public class Video extends AppCompatActivity{
         setContentView(R.layout.activity_main2);
 
         videoView = (VideoView)findViewById(R.id.video_view);
-
-        fab = (FloatingActionButton) findViewById(R.id.fab);
+        txtRuta = (TextView) findViewById(R.id.txt_video_ruta);
+        fab = (Button) findViewById(R.id.fab);
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -79,6 +82,8 @@ public class Video extends AppCompatActivity{
             Toast.makeText(Video.this, "Se guardó el video en:\n"+
                     Environment.getExternalStorageDirectory() + FOLDER + NOMBRE + FORMATO_VIDEO, Toast.LENGTH_LONG).show();
 
+            txtRuta.setText("Ruta:\n"+
+                    Environment.getExternalStorageDirectory() + FOLDER + NOMBRE + FORMATO_VIDEO);
             videoView.setVideoURI(videoUri);
             videoView.start();
 

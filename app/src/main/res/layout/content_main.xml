@@ -8,22 +8,6 @@
     tools:context=".MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <ImageView
-        android:id="@+id/img_camara"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:layout_marginBottom="12dp"
-        android:src="@drawable/camara"
-        android:layout_centerHorizontal="true"/>
 
-    <Button
-        android:id="@+id/btn_camara"
-        android:layout_below="@id/img_camara"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Capturar imagen"
-        android:layout_centerHorizontal="true"
-        android:theme="@style/Widget.AppCompat.Button.Borderless"
-        android:textColor="@android:color/white"/>
 
 </RelativeLayout>
