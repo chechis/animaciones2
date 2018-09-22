@@ -3,6 +3,10 @@ package next.com.camaraimagen;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Environment;
@@ -21,7 +25,7 @@ import java.io.File;
 
 public class Video extends AppCompatActivity{
 
-    Button fab;
+    Button fab, abrir;
 
     private static final String FORMATO_VIDEO = ".mp4";
     private static final String FOLDER = "/GIFs/";
@@ -53,6 +57,16 @@ public class Video extends AppCompatActivity{
         videoView = (VideoView)findViewById(R.id.video_view);
         txtRuta = (TextView) findViewById(R.id.txt_video_ruta);
         fab = (Button) findViewById(R.id.fab);
+        abrir = (Button) findViewById(R.id.btn_video_abrir);
+
+        abrir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent videoAbrir = new Intent(Intent.ACTION_PICK, MediaStore.Video.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(videoAbrir, 2);
+            }
+        });
 
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,7 +108,30 @@ public class Video extends AppCompatActivity{
                 }
             });
 
-        }else{
+        }if (requestCode == 2 && null != data){
+            txtRuta.setText("Ruta:\n"+
+                    Environment.getExternalStorageDirectory() + FOLDER + NOMBRE + FORMATO_VIDEO);
+
+            Uri videoSelec = data.getData();
+            String [] path = {MediaStore.Video.Media.DATA};
+            Cursor cursor = getContentResolver().query(videoSelec,path,null,null,null);
+            cursor.moveToFirst();
+            int columna = cursor.getColumnIndex(path[0]);
+            String pathVideo = cursor.getString(columna);
+            cursor.close();
+
+
+            videoView.setVideoPath(pathVideo);
+            videoView.start();
+            videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    videoView.start();
+                }
+            });
+        }
+
+        else{
             Toast.makeText(Video.this, "Ha ocurrido un error al guardar el video", Toast.LENGTH_SHORT).show();
         }
     }

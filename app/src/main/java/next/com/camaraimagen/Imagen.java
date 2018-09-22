@@ -3,6 +3,7 @@ package next.com.camaraimagen;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
@@ -48,16 +49,25 @@ public class Imagen extends AppCompatActivity {
         botonAbrir = (Button) findViewById(R.id.btn_imagen_abrir);
         txtRuta = (TextView) findViewById(R.id.txt_imagen_ruta);
 
+        botonAbrir.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                startActivityForResult(i, 2);
+
+            }
+        });
+
 
         botonCamara.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent camaraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-                File imagenFolder= new File(Environment.getExternalStorageDirectory(), "CamaraExa");
+                File imagenFolder= new File(Environment.getExternalStorageDirectory(), "CamaraExam");
                 imagenFolder.mkdirs();
 
-                File imagen = new File(imagenFolder, "fotoExa.jpg");
+                File imagen = new File(imagenFolder, "fotoExam.jpg");
 
                 Uri uriImagen = Uri.fromFile(imagen);
 
@@ -75,11 +85,11 @@ public class Imagen extends AppCompatActivity {
 
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK){
 
-            Toast.makeText(this, "Se ha guardado la imagen:\n"+Environment.getExternalStorageDirectory() + "/CamaraExa/fotoExa.jpg", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Se ha guardado la imagen:\n"+Environment.getExternalStorageDirectory() + "/CamaraExam/fotoExam.jpg", Toast.LENGTH_SHORT).show();
 
-            txtRuta.setText("Ruta:\n"+Environment.getExternalStorageDirectory() + "/CamaraExa/fotoExa.jpg");
+            txtRuta.setText("Ruta:\n"+Environment.getExternalStorageDirectory() + "/CamaraExam/fotoExam.jpg");
 
-            Bitmap bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory()+ "/CamaraExa/fotoExa.jpg");
+            Bitmap bitmap = BitmapFactory.decodeFile(Environment.getExternalStorageDirectory()+ "/CamaraExam/fotoExam.jpg");
 
             int height = bitmap.getHeight();
             int width = bitmap.getWidth();
@@ -93,8 +103,28 @@ public class Imagen extends AppCompatActivity {
             Bitmap nuevaImagen = Bitmap.createBitmap(bitmap,0,0,width,height,matrix,true);
             imgCamara.setImageBitmap(nuevaImagen);
 
-        }else {
-            Toast.makeText(this, "No se guardo correctamente la imagen en el dispositivo", Toast.LENGTH_SHORT).show();
+        }if (requestCode == 2 && null != data){
+
+            txtRuta.setText("Ruta:\n"+Environment.getExternalStorageDirectory() + "/CamaraExam/fotoExam.jpg");
+
+            Uri imagenseleccionada = data.getData();
+            String[] path = {MediaStore.Images.Media.DATA};
+            Cursor cursor = getContentResolver().query(imagenseleccionada,path,null,null,null);
+            cursor.moveToFirst();
+            int columna = cursor.getColumnIndex(path[0]);
+            String pathimagen = cursor.getString(columna);
+            cursor.close();
+
+            Bitmap bitmap = BitmapFactory.decodeFile(pathimagen);
+            BitmapFactory.Options options= new BitmapFactory.Options();
+            int height= bitmap.getHeight();
+            int width=bitmap.getWidth();
+            float scaleA =((float)(width/2))/width;
+            float scaleB =((float)(height/2))/height;
+            Matrix matrix = new Matrix();
+            matrix.postScale(scaleA,scaleB);
+            Bitmap nuevaimagen= Bitmap.createBitmap(bitmap,0,0,width,height,matrix,true);
+            imgCamara.setImageBitmap(nuevaimagen);
 
         }
     }
