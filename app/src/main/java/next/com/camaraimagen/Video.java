@@ -132,7 +132,7 @@ public class Video extends AppCompatActivity{
         }
 
         else{
-            Toast.makeText(Video.this, "Ha ocurrido un error al guardar el video", Toast.LENGTH_SHORT).show();
+            Toast.makeText(Video.this, "Ha ocurrido un error", Toast.LENGTH_SHORT).show();
         }
     }
 }
