@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.MediaController;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.VideoView;
@@ -92,14 +93,19 @@ public class Video extends AppCompatActivity{
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+        MediaController mediaController = new MediaController(Video.this);
+
         if (requestCode == REQUEST_CODE && resultCode == RESULT_OK){
             Toast.makeText(Video.this, "Se guardó el video en:\n"+
                     Environment.getExternalStorageDirectory() + FOLDER + NOMBRE + FORMATO_VIDEO, Toast.LENGTH_LONG).show();
 
             txtRuta.setText("Ruta:\n"+
                     Environment.getExternalStorageDirectory() + FOLDER + NOMBRE + FORMATO_VIDEO);
+
             videoView.setVideoURI(videoUri);
+            videoView.setMediaController(mediaController);
             videoView.start();
+            mediaController.setAnchorView(videoView);
 
             videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
@@ -120,9 +126,11 @@ public class Video extends AppCompatActivity{
             String pathVideo = cursor.getString(columna);
             cursor.close();
 
-
+            videoView.setMediaController(mediaController);
             videoView.setVideoPath(pathVideo);
             videoView.start();
+
+            mediaController.setAnchorView(videoView);
             videoView.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
